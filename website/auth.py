@@ -65,10 +65,15 @@ def signup():
 
             db.session.add(new_user)
             db.session.commit()
-            flash('Account created!', category='success')
-            login_user(user,remember=True)
-            return redirect(url_for('views.home'))
             # return redirect('/)->similar
+
+            user=User.query.filter_by(email=email).first()
+            if user:
+                login_user(user,remember=True)
+                flash('Account created!', category='success')
+                return redirect(url_for('views.home'))
+            else:
+                flash('An error occurred while creating the account.', category='error')
 
 
     return render_template("signUp.html",user=current_user)
